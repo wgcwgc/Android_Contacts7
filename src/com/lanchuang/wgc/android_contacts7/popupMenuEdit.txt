@@ -1,0 +1,74 @@
+/**
+ * 自定义PopupMenu
+ * Created by hanj on 15-3-17.
+ */
+public class PopupMenuActivity extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+ 
+        LinearLayout lin = new LinearLayout(this);
+        Button btn = new Button(this);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        btn.setLayoutParams(p);
+        lin.addView(btn);
+ 
+        btn.setText("显示PopupMenu");
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu(PopupMenuActivity.this, v);
+            }
+        });
+ 
+        setContentView(lin);
+    }
+ 
+    //当前选择的menuItem的id
+    private int checkedItemId = R.id.menu_setting_wifi;
+ 
+    private void showPopupMenu(final Context context, View ancher) {
+        PopupMenu popupMenu = new PopupMenu(context, ancher);
+        //引入菜单资源
+        popupMenu.inflate(R.menu.menu_popup);
+ 
+        //设置选中
+        popupMenu.getMenu().findItem(checkedItemId).setChecked(true);
+        //菜单项的监听
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menu_setting_wifi:
+                        checkedItemId = R.id.menu_setting_wifi;
+                        Toast.makeText(context, "WIFI", Toast.LENGTH_SHORT).show();
+                        break;
+ 
+                    case R.id.menu_setting_gps:
+                        checkedItemId = R.id.menu_setting_gps;
+                        Toast.makeText(context, "GPS", Toast.LENGTH_SHORT).show();
+                        break;
+ 
+                    case R.id.menu_setting_userIcon:
+                        Toast.makeText(context, "USER_ICON", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
+ 
+        //使用反射，强制显示菜单图标
+        try {
+            Field field = popupMenu.getClass().getDeclaredField("mPopup");
+            field.setAccessible(true);
+            MenuPopupHelper mHelper = (MenuPopupHelper) field.get(popupMenu);
+            mHelper.setForceShowIcon(true);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+ 
+        //显示PopupMenu
+        popupMenu.show();
+    }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android_Contacts7</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_settings">Settings</string>
+    <string name="photos">联系人头像</string>
+    <string name="more">更多</string>
+    <string name="hint"> </string>
+    <string name="call">打电话</string>
+    <string name="message">发短信</string>
+
+</resources>
